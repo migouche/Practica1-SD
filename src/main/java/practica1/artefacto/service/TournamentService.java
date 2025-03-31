@@ -44,4 +44,8 @@ public class TournamentService {
     public void delete(Long id) {
         tournaments.remove(id);
     }
+
+    public Map<Long, Tournament> getAll() {
+        return tournaments;
+    }
 }

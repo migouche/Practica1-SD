@@ -62,16 +62,17 @@ document.addEventListener('DOMContentLoaded', function () {
 
         async function updateTournamentsList() {
             const tournaments = await fetchData('tournaments');
+            const tournamentsArray = Object.values(tournaments);
             tournamentsContainer.innerHTML = '';
-            tournaments.forEach(tournament => {
+            tournamentsArray.forEach(tournament => {
                 const div = document.createElement('div');
                 div.classList.add('list-item');
                 div.innerHTML = `
                     <strong>${tournament.name}</strong> - ${tournament.date} - ${tournament.location}
                     <button data-id="${tournament.id}" class="delete-tournament">Delete</button>
                     <div class="details">
-                        <p>Teams: ${tournament.teams.length}</p>
-                        <p>Matches: ${tournament.matches.length}</p>
+                        <p>Teams: ${tournament.teamIds.length}</p>
+                        <p>Matches: ${tournament.matchIds.length}</p>
                     </div>
                 `;
                 tournamentsContainer.appendChild(div);
@@ -107,8 +108,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
         async function updateTeamsList() {
             const teams = await fetchData('teams');
+            const teamsArray = Object.values(teams);
             teamsContainer.innerHTML = '';
-            teams.forEach(team => {
+            teamsArray.forEach(team => {
                 const div = document.createElement('div');
                 div.classList.add('list-item');
                 div.innerHTML = `
@@ -152,8 +154,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
         async function updateMatchesList() {
             const matches = await fetchData('matches');
+            const matchesArray = Object.values(matches);
             matchesContainer.innerHTML = '';
-            matches.forEach(match => {
+            matchesArray.forEach(match => {
                 const team1Logo = knownTeamsLogos[match.team1.toLowerCase()] || 'logos/default.png';
                 const team2Logo = knownTeamsLogos[match.team2.toLowerCase()] || 'logos/default.png';
 

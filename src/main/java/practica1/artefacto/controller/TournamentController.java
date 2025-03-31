@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.*;
 import practica1.artefacto.model.Tournament;
 import practica1.artefacto.service.TournamentService;
 
+import java.util.Collection;
 import java.util.Map;
 
 @RestController
@@ -22,6 +23,11 @@ public class TournamentController {
     @GetMapping("/{id}")
     public Tournament read(@PathVariable Long id) {
         return tournamentService.read(id);
+    }
+
+    @GetMapping
+    public Map<Long, Tournament> getAll() {
+        return tournamentService.getAll();
     }
 
     @PutMapping("/{id}")
