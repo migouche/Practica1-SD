@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tournaments Overview</title>
+  <link rel="stylesheet" href="styles.css">
+  <script defer src="script.js"></script>
+</head>
+<body>
+    <header>
+        <h1><a href="index.html">Tournament Manager</a></h1>
+        <nav>
+          <ul>
+            <li><a href="tournaments.html">Tournaments</a></li>
+            <li><a href="teams.html">Teams</a></li>
+            <li><a href="matches.html">Matches</a></li>
+          </ul>
+        </nav>
+      </header>
+      
+  </header>
+  <main>
+    <section id="tournaments-view">
+      <h2>Tournaments Overview</h2>
+      <form id="tournament-form">
+        <div>
+          <label for="tournament-name">Name:</label>
+          <input type="text" id="tournament-name" name="tournamentName" required>
+        </div>
+        <div>
+          <label for="tournament-date">Date:</label>
+          <input type="date" id="tournament-date" name="tournamentDate" required>
+        </div>
+        <div>
+          <label for="tournament-location">Location:</label>
+          <input type="text" id="tournament-location" name="tournamentLocation" required>
+        </div>
+        <button type="submit">Add Tournament</button>
+      </form>
+      <!-- Aquí se mostrarán los torneos creados -->
+      <div id="tournaments-list"></div>
+    </section>
+  </main>
+  <footer>
+    <p>&copy; 2025 Tournament Manager</p>
+  </footer>
+</body>
+</html>

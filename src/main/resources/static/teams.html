@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Teams & Players</title>
+  <link rel="stylesheet" href="styles.css">
+  <script defer src="script.js"></script>
+</head>
+<body>
+    <header>
+        <h1><a href="index.html">Tournament Manager</a></h1>
+        <nav>
+          <ul>
+            <li><a href="tournaments.html">Tournaments</a></li>
+            <li><a href="teams.html">Teams</a></li>
+            <li><a href="matches.html">Matches</a></li>
+          </ul>
+        </nav>
+      </header>
+      
+  <main>
+    <section id="teams-view">
+      <h2>Teams and Players</h2>
+      <form id="team-form">
+        <div>
+          <label for="team-name">Team Name:</label>
+          <input type="text" id="team-name" name="teamName" required>
+        </div>
+        <div>
+          <label for="team-coach">Coach:</label>
+          <input type="text" id="team-coach" name="teamCoach" required>
+        </div>
+        <button type="submit">Add Team</button>
+      </form>
+      <!-- Aquí se mostrarán los equipos creados -->
+      <div id="teams-list"></div>
+    </section>
+
+    <section id="players-field">
+        <h2>Alineaciones</h2>
+        <!-- Campo de fútbol con 11 posiciones -->
+        <div class="soccer-field">
+          <div class="position" data-position="ST1">ST1</div>
+          <div class="position" data-position="ST2">ST2</div>
+          <div class="position" data-position="LM">LM</div>
+          <div class="position" data-position="CM1">CM1</div>
+          <div class="position" data-position="CM2">CM2</div>
+          <div class="position" data-position="RM">RM</div>
+          <div class="position" data-position="LB">LB</div>
+          <div class="position" data-position="CB1">CB1</div>
+          <div class="position" data-position="CB2">CB2</div>
+          <div class="position" data-position="RB">RB</div>
+          <div class="position" data-position="GK">GK</div>
+        </div>
+        <!-- Aquí se listarán los jugadores asignados -->
+        <div id="players-container"></div>
+      </section>
+      
+  </main>
+  <footer>
+    <p>&copy; 2025 Tournament Manager</p>
+  </footer>
+</body>
+</html>

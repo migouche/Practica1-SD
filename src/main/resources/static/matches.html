@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Matches Details</title>
+  <link rel="stylesheet" href="styles.css">
+  <script defer src="script.js"></script>
+</head>
+<body>
+  <header>
+    <h1><a href="index.html">Tournament Manager</a></h1>
+    <nav>
+      <ul>
+        <li><a href="tournaments.html">Tournaments</a></li>
+        <li><a href="teams.html">Teams</a></li>
+        <li><a href="matches.html">Matches</a></li>
+      </ul>
+    </nav>
+  </header>
+  
+  <main>
+    <section id="matches-view">
+      <h2>Matches</h2>
+      <form id="match-form">
+        <div>
+          <label for="match-date">Date:</label>
+          <input type="date" id="match-date" name="matchDate" required>
+        </div>
+        <div>
+          <label for="match-time">Time:</label>
+          <input type="time" id="match-time" name="matchTime" required>
+        </div>
+        <div>
+          <label for="match-team1">Team 1:</label>
+          <input type="text" id="match-team1" name="matchTeam1" required>
+        </div>
+        <div>
+          <label for="match-team2">Team 2:</label>
+          <input type="text" id="match-team2" name="matchTeam2" required>
+        </div>
+        <div>
+          <label for="match-tournament">Tournament:</label>
+          <input type="text" id="match-tournament" name="matchTournament" required>
+        </div>
+        <button type="submit">Add Match</button>
+      </form>
+      <!-- Aquí se mostrarán los partidos creados -->
+      <div id="matches-list"></div>
+    </section>
+  </main>
+  <!-- Modal para advertencias -->
+<div id="modal-alert" class="modal">
+    <div class="modal-content">
+      <span id="modal-close" class="close">&times;</span>
+      <p id="modal-message">One or both teams do not exist. Please create the teams first.</p>
+    </div>
+  </div>
+  <footer>
+    <p>&copy; 2025 Tournament Manager</p>
+  </footer>
+</body>
+</html>

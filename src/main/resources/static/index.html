@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Meta tags -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tournament Manager - Football Tournaments</title>
+  <!-- CSS -->
+  <link rel="stylesheet" href="styles.css">
+  <!-- JavaScript -->
+  <script defer src="script.js"></script>
+</head>
+<body>
+  <!-- Header -->
+  <header>
+    <h1><a href="index.html">Tournament Manager</a></h1>
+    <nav>
+      <ul>
+        <li><a href="tournaments.html">Tournaments</a></li>
+        <li><a href="teams.html">Teams</a></li>
+        <li><a href="matches.html">Matches</a></li>
+      </ul>
+    </nav>
+  </header>
+  
+
+  <!-- Main content -->
+  <main>
+    <!-- Section for managing tournaments -->
+    <section id="tournaments">
+      <h2>Tournaments</h2>
+      <form id="tournament-form">
+        <div>
+          <label for="tournament-name">Name:</label>
+          <input type="text" id="tournament-name" name="tournamentName" required>
+        </div>
+        <div>
+          <label for="tournament-date">Date:</label>
+          <input type="date" id="tournament-date" name="tournamentDate" required>
+        </div>
+        <div>
+          <label for="tournament-location">Location:</label>
+          <input type="text" id="tournament-location" name="tournamentLocation" required>
+        </div>
+        <button type="submit">Add Tournament</button>
+      </form>
+      <!-- List of tournaments -->
+      <div id="tournaments-list">
+        <!-- Each tournament item will be injected here -->
+      </div>
+    </section>
+
+    <!-- Section for managing teams -->
+    <section id="teams">
+      <h2>Teams</h2>
+      <form id="team-form">
+        <div>
+          <label for="team-name">Team Name:</label>
+          <input type="text" id="team-name" name="teamName" required>
+        </div>
+        <div>
+          <label for="team-coach">Coach:</label>
+          <input type="text" id="team-coach" name="teamCoach">
+        </div>
+        <div>
+          <label for="team-ranking">Ranking:</label>
+          <input type="number" id="team-ranking" name="teamRanking">
+        </div>
+        <button type="submit">Add Team</button>
+      </form>
+      <!-- List of teams -->
+      <div id="teams-list">
+        <!-- Each team item will be injected here -->
+      </div>
+    </section>
+
+    <!-- Section for managing matches -->
+    <section id="matches">
+      <h2>Matches</h2>
+      <form id="match-form">
+        <div>
+          <label for="match-date">Match Date:</label>
+          <input type="date" id="match-date" name="matchDate" required>
+        </div>
+        <div>
+          <label for="match-team1">Team 1:</label>
+          <input type="text" id="match-team1" name="matchTeam1" required>
+        </div>
+        <div>
+          <label for="match-team2">Team 2:</label>
+          <input type="text" id="match-team2" name="matchTeam2" required>
+        </div>
+        <div>
+          <label for="match-score">Score:</label>
+          <input type="text" id="match-score" name="matchScore" placeholder="e.g., 2-1">
+        </div>
+        <button type="submit">Add Match</button>
+      </form>
+      <!-- List of matches -->
+      <div id="matches-list">
+        <!-- Each match item will be injected here -->
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <p>&copy; 2025 Tournament Manager</p>
+  </footer>
+</body>
+</html>
