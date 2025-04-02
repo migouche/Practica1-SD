@@ -1,34 +1,34 @@
 package practica1.artefacto.service;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import practica1.artefacto.model.Tournament;
+import practica1.artefacto.repository.TournamentRepository;
 
-import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Service
 public class TournamentService {
-    private final Map<Long, Tournament> tournaments = new HashMap<>();
-    private Long currentId = 1L;
+
+    @Autowired
+    private TournamentRepository tournamentRepository;
 
     public Tournament create(Tournament tournament) {
-        tournament.setId(currentId++);
-        tournaments.put(tournament.getId(), tournament);
-        return tournament;
+        return tournamentRepository.save(tournament);
     }
 
     public Tournament read(Long id) {
-        return tournaments.get(id);
+        return tournamentRepository.findById(id).orElse(null);
     }
 
     public Tournament update(Long id, Tournament tournament) {
         tournament.setId(id);
-        tournaments.put(id, tournament);
-        return tournament;
+        return tournamentRepository.save(tournament);
     }
 
     public Tournament patch(Long id, Map<String, Object> updates) {
-        Tournament tournament = tournaments.get(id);
+        Tournament tournament = tournamentRepository.findById(id).orElse(null);
         if (tournament != null) {
             updates.forEach((key, value) -> {
                 switch (key) {
@@ -37,15 +37,16 @@ public class TournamentService {
                     case "location" -> tournament.setLocation((String) value);
                 }
             });
+            tournamentRepository.save(tournament);
         }
         return tournament;
     }
 
     public void delete(Long id) {
-        tournaments.remove(id);
+        tournamentRepository.deleteById(id);
     }
 
-    public Map<Long, Tournament> getAll() {
-        return tournaments;
+    public List<Tournament> getAll() {
+        return tournamentRepository.findAll();
     }
 }

@@ -1,12 +1,30 @@
 package practica1.artefacto.model;
 
+import jakarta.persistence.*;
+
+@Entity
 public class Match {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String date;
     private String time;
+    
+    @Column(name = "team1_id")
     private Long team1Id;
+    
+    @Column(name = "team2_id")
     private Long team2Id;
+    
+    @Column(name = "tournament_id")
     private Long tournamentId;
+    
+    // Add transient fields for full team objects
+    @Transient
+    private Team team1;
+    
+    @Transient
+    private Team team2;
 
     // Getters and Setters
     public Long getId() {
@@ -44,5 +62,28 @@ public class Match {
     }
     public void setTournamentId(Long tournamentId) {
         this.tournamentId = tournamentId;
+    }
+
+    // Add new getters and setters for team objects
+    public Team getTeam1() {
+        return team1;
+    }
+    
+    public void setTeam1(Team team1) {
+        this.team1 = team1;
+        if (team1 != null) {
+            this.team1Id = team1.getId();
+        }
+    }
+    
+    public Team getTeam2() {
+        return team2;
+    }
+    
+    public void setTeam2(Team team2) {
+        this.team2 = team2;
+        if (team2 != null) {
+            this.team2Id = team2.getId();
+        }
     }
 }

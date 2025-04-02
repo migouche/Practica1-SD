@@ -99,7 +99,8 @@ document.addEventListener('DOMContentLoaded', function () {
             e.preventDefault();
             const name = document.getElementById('team-name').value;
             const coach = document.getElementById('team-coach').value;
-            const badge = 'logos/default.png'; // Replace with logic for badge if needed
+            const badge = await fetchData('logos/' + name.toLowerCase());
+            console.log(`badge: ${JSON.stringify(badge)}`);
             const team = { name, coach, badge };
             await postData('teams', team);
             updateTeamsList();
@@ -142,11 +143,31 @@ document.addEventListener('DOMContentLoaded', function () {
             e.preventDefault();
             const date = document.getElementById('match-date').value;
             const time = document.getElementById('match-time').value;
-            const team1 = document.getElementById('match-team1').value;
-            const team2 = document.getElementById('match-team2').value;
+            const team1Name = document.getElementById('match-team1').value;
+            const team2Name = document.getElementById('match-team2').value;
             const tournamentName = document.getElementById('match-tournament').value;
 
-            const match = { date, time, team1, team2, tournamentName };
+            // First, find the teams by name
+            const teams = await fetchData('teams');
+            const teamsArray = Object.values(teams);
+            
+            const team1 = teamsArray.find(t => t.name === team1Name);
+            const team2 = teamsArray.find(t => t.name === team2Name);
+            
+            if (!team1 || !team2) {
+                alert("One or both teams don't exist. Please create them first.");
+                return;
+            }
+            
+            // Now create the match with team IDs
+            const match = { 
+                date, 
+                time, 
+                team1Id: team1.id, 
+                team2Id: team2.id, 
+                tournamentId: null  // You'd need to fetch tournament ID similarly
+            };
+            
             await postData('matches', match);
             updateMatchesList();
             matchForm.reset();
@@ -155,18 +176,19 @@ document.addEventListener('DOMContentLoaded', function () {
         async function updateMatchesList() {
             const matches = await fetchData('matches');
             const matchesArray = Object.values(matches);
+            console.log(`matches: ${JSON.stringify(matchesArray)}`);
             matchesContainer.innerHTML = '';
             matchesArray.forEach(match => {
-                const team1Logo = knownTeamsLogos[match.team1.toLowerCase()] || 'logos/default.png';
-                const team2Logo = knownTeamsLogos[match.team2.toLowerCase()] || 'logos/default.png';
+                const team1Logo = knownTeamsLogos[match.team1Id] || 'logos/default.png';
+                const team2Logo = knownTeamsLogos[match.team2Id] || 'logos/default.png';
 
                 const div = document.createElement('div');
                 div.classList.add('list-item');
                 div.innerHTML = `
                     <div class="match-card">
-                        <img src="${team1Logo}" alt="${match.team1}" class="team-logo">
+                        <img src="${team1Logo}" alt="${match.team1.name}" class="team-logo">
                         <span>vs</span>
-                        <img src="${team2Logo}" alt="${match.team2}" class="team-logo">
+                        <img src="${team2Logo}" alt="${match.team2.name}" class="team-logo">
                         <div class="match-details">
                             <p><strong>Tournament:</strong> ${match.tournamentName}</p>
                             <p><strong>Date:</strong> ${match.date} - <strong>Time:</strong> ${match.time}</p>
@@ -188,4 +210,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
         updateMatchesList();
     }
+
+
 });

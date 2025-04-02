@@ -1,37 +1,37 @@
 package practica1.artefacto.service;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import practica1.artefacto.model.Team;
+import practica1.artefacto.repository.TeamRepository;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
 
 @Service
 public class TeamService {
-    private final Map<Long, Team> teams = new HashMap<>();
-    private Long currentId = 1L;
+
+    @Autowired
+    private TeamRepository teamRepository;
 
     public Team create(Team team) {
-        team.setId(currentId++);
-        teams.put(team.getId(), team);
-        return team;
+        return teamRepository.save(team);
     }
 
     public Team read(Long id) {
-        return teams.get(id);
+        System.out.println("Reading team with ID: " + id);
+        return teamRepository.findById(id).orElse(null);
     }
 
     public Team update(Long id, Team team) {
         team.setId(id);
-        teams.put(id, team);
-        return team;
+        return teamRepository.save(team);
     }
 
     public void delete(Long id) {
-        teams.remove(id);
+        teamRepository.deleteById(id);
     }
 
-    public Map<Long, Team> getAll() {
-        return teams;
+    public List<Team> getAll() {
+        return teamRepository.findAll();
     }
 }

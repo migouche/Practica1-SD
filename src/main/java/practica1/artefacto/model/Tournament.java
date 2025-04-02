@@ -1,14 +1,22 @@
 package practica1.artefacto.model;
 
+import jakarta.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
+@Entity
 public class Tournament {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
     private String date;
     private String location;
+
+    @ElementCollection
     private List<Long> teamIds = new ArrayList<>();
+
+    @ElementCollection
     private List<Long> matchIds = new ArrayList<>();
 
     // Getters and Setters

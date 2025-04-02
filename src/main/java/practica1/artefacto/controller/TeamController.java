@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.*;
 import practica1.artefacto.model.Team;
 import practica1.artefacto.service.TeamService;
 
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -25,7 +26,7 @@ public class TeamController {
     }
 
     @GetMapping
-    public Map<Long, Team> getAll() {
+    public List<Team> getAll() {
         return teamService.getAll();
     }
 
