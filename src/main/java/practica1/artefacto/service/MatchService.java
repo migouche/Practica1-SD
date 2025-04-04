@@ -4,8 +4,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import practica1.artefacto.model.Match;
 import practica1.artefacto.model.Team;
+import practica1.artefacto.model.Tournament;
 import practica1.artefacto.repository.MatchRepository;
 import practica1.artefacto.repository.TeamRepository;
+import practica1.artefacto.repository.TournamentRepository;
 
 import java.util.List;
 import java.util.Map;
@@ -18,6 +20,9 @@ public class MatchService {
     
     @Autowired
     private TeamRepository teamRepository;
+    
+    @Autowired
+    private TournamentRepository tournamentRepository;
 
     public Match create(Match match) {
         // Validate that both teams exist
@@ -28,7 +33,30 @@ public class MatchService {
             .orElseThrow(() -> new IllegalArgumentException("Team 2 with ID " + match.getTeam2Id() + " not found"));
         
         // Save the match
-        return matchRepository.save(match);
+        Match savedMatch = matchRepository.save(match);
+        
+        // Update the tournament with the match ID and team IDs
+        if (match.getTournamentId() != null) {
+            Tournament tournament = tournamentRepository.findById(match.getTournamentId())
+                .orElseThrow(() -> new IllegalArgumentException("Tournament with ID " + match.getTournamentId() + " not found"));
+            
+            // Add match ID to tournament
+            tournament.addMatchId(savedMatch.getId());
+            
+            // Add team IDs to tournament if not already present
+            if (!tournament.getTeamIds().contains(team1.getId())) {
+                tournament.addTeamId(team1.getId());
+            }
+            
+            if (!tournament.getTeamIds().contains(team2.getId())) {
+                tournament.addTeamId(team2.getId());
+            }
+            
+            // Save updated tournament
+            tournamentRepository.save(tournament);
+        }
+        
+        return savedMatch;
     }
 
     public Match read(Long id) {

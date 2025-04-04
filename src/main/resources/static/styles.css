@@ -272,3 +272,8 @@ footer {
 .close:focus {
   color: #000;
 }
+
+.team-info{
+  display: flex;
+  flex-direction: column;
+}

@@ -99,8 +99,7 @@ document.addEventListener('DOMContentLoaded', function () {
             e.preventDefault();
             const name = document.getElementById('team-name').value;
             const coach = document.getElementById('team-coach').value;
-            const badge = await fetchData('logos/' + name.toLowerCase());
-            console.log(`badge: ${JSON.stringify(badge)}`);
+            const badge = `${API_BASE_URL}/logos/${name.toLowerCase()}`; 
             const team = { name, coach, badge };
             await postData('teams', team);
             updateTeamsList();
@@ -150,12 +149,26 @@ document.addEventListener('DOMContentLoaded', function () {
             // First, find the teams by name
             const teams = await fetchData('teams');
             const teamsArray = Object.values(teams);
+
+            const tournamentsArray = await fetchData('tournaments').then(res => Object.values(res));
             
             const team1 = teamsArray.find(t => t.name === team1Name);
             const team2 = teamsArray.find(t => t.name === team2Name);
+
+            const tournament = tournamentsArray.find(t => t.name === tournamentName);
+            
             
             if (!team1 || !team2) {
                 alert("One or both teams don't exist. Please create them first.");
+                return;
+            }
+
+            if (team1.id === team2.id) {
+                alert("A team cannot play against itself.");
+                return;
+            }
+            if (!tournament) {
+                alert("Tournament not found. Please create it first.");
                 return;
             }
             
@@ -165,7 +178,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 time, 
                 team1Id: team1.id, 
                 team2Id: team2.id, 
-                tournamentId: null  // You'd need to fetch tournament ID similarly
+                tournamentId: tournament.id  // You'd need to fetch tournament ID similarly
             };
             
             await postData('matches', match);
@@ -178,19 +191,35 @@ document.addEventListener('DOMContentLoaded', function () {
             const matchesArray = Object.values(matches);
             console.log(`matches: ${JSON.stringify(matchesArray)}`);
             matchesContainer.innerHTML = '';
-            matchesArray.forEach(match => {
+            matchesArray.forEach(async match => {
                 const team1Logo = knownTeamsLogos[match.team1Id] || 'logos/default.png';
                 const team2Logo = knownTeamsLogos[match.team2Id] || 'logos/default.png';
+
+                const team1 = await fetchData(`teams/${match.team1Id}`);
+                console.log(`team1: ${JSON.stringify(team1)}`);
+
+                const team1Name = await fetchData(`teams/${match.team1Id}`).then(res => res.name);
+                const team2Name = await fetchData(`teams/${match.team2Id}`).then(res => res.name);
+                const tournamentName = await fetchData(`tournaments/${match.tournamentId}`).then(res => res.name);
+
+
+                console.log(`team1Name: ${team1Name}`);
 
                 const div = document.createElement('div');
                 div.classList.add('list-item');
                 div.innerHTML = `
                     <div class="match-card">
-                        <img src="${team1Logo}" alt="${match.team1.name}" class="team-logo">
+                    <div class="team-info"
+                        <img src="${team1Logo}" alt="${team1Name}" class="team-logo">
+                        <strong>${team1Name}</strong>
+                    </div>
                         <span>vs</span>
-                        <img src="${team2Logo}" alt="${match.team2.name}" class="team-logo">
+                    <div class="team-info">
+                        <img src="${team2Logo}" alt="${team2Name}" class="team-logo">
+                        <strong>${team2Name}</strong>
+                    </div>
                         <div class="match-details">
-                            <p><strong>Tournament:</strong> ${match.tournamentName}</p>
+                            <p><strong>Tournament:</strong> ${tournamentName}</p>
                             <p><strong>Date:</strong> ${match.date} - <strong>Time:</strong> ${match.time}</p>
                         </div>
                         <button data-id="${match.id}" class="delete-match">Delete</button>

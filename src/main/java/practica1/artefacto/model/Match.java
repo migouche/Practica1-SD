@@ -1,5 +1,7 @@
 package practica1.artefacto.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.*;
 
 @Entity
@@ -21,9 +23,11 @@ public class Match {
     
     // Add transient fields for full team objects
     @Transient
+    @JsonIgnore
     private Team team1;
     
     @Transient
+    @JsonIgnore
     private Team team2;
 
     // Getters and Setters
