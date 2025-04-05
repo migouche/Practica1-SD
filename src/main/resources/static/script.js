@@ -443,9 +443,7 @@ const defaultLineup = {
         ST2: "Juanmi"
     }
   };
-  
-  let selectedTeamId = null; // Variable para almacenar el equipo seleccionado
-  
+
   
 
     

@@ -1,7 +1,5 @@
 package practica1.artefacto.model;
-
 import jakarta.persistence.*;
-
 @Entity
 public class Team {
     @Id
@@ -10,6 +8,7 @@ public class Team {
     private String name;
     private String coach;
     private String badge;
+
 
     // Getters and Setters
     public Long getId() {
