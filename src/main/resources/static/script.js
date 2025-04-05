@@ -1,5 +1,6 @@
 document.addEventListener('DOMContentLoaded', function () {
     const API_BASE_URL = 'http://localhost:8080/api';
+    
 
     // Diccionario de equipos conocidos y sus archivos de imagen (las claves deben ser en minúsculas)
     const knownTeamsLogos = {
@@ -114,6 +115,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 div.innerHTML = `
                     <img src="${team.badge}" alt="${team.name}" class="team-logo" style="width:40px; height:40px; vertical-align: middle; margin-right: 8px;">
                     <strong>${team.name}</strong> - Coach: ${team.coach}
+                    <button data-id="${team.id}" class="show-lineup">Show Lineup</button>
                     <button data-id="${team.id}" class="delete-team">Delete</button>
                 `;
                 teamsContainer.appendChild(div);
@@ -125,6 +127,10 @@ document.addEventListener('DOMContentLoaded', function () {
                 const id = e.target.getAttribute('data-id');
                 await deleteData('teams', id);
                 updateTeamsList();
+            }
+            if (e.target.classList.contains('show-lineup')) {
+                const id = Number(e.target.getAttribute('data-id'));
+                window.location.href = `teams.html?teamId=${id}`;
             }
         });
 
@@ -263,3 +269,166 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 });
+
+const defaultLineup = {
+    GK: "",
+    LB: "",
+    CB1: "",
+    CB2: "",
+    RB: "",
+    LM: "",
+    CM1: "",
+    CM2: "",
+    RM: "",
+    ST1: "",
+    ST2: ""
+  };
+
+  const defaultTeamLineups = {
+    "barcelona": {
+      GK: "Ter Stegen",
+      LB: "Balde",
+      CB1: "Cubarsí",
+      CB2: "I.Martinez",
+      RB: "Kounde",
+      LM: "Fati",
+      CM1: "Pedri",
+      CM2: "De Jong",
+      RM: "Lamine Yamal",
+      ST1: "Lewandowski",
+      ST2: "Rapinha"
+    },
+    "realmadrid": {
+      GK: "Courtois",
+      LB: "medy",
+      CB1: "Rudiger",
+      CB2: "Militao",
+      RB: "carvajal",
+      LM: "Vinicius",
+      CM1: "Tchouameni",
+      CM2: "Modric",
+      RM: "Valverde",
+      ST1: "Bellingham",
+      ST2: "Mbappe"
+    },
+
+    "atleticodemadrid": {
+      GK: "Oblak",
+      LB: "Reinildo",
+      CB1: "Gimenez",
+      CB2: "Lenglet",
+      RB: "Molina",
+      LM: "Lino",
+      CM1: "Barrios",
+      CM2: "De Paul",
+      RM: "LLorente",
+      ST1: "Julian Alvarez",
+      ST2: "Griezmann"
+    },
+
+    "liverpool": {
+        GK: "Alisson",
+        LB: "Robertson",
+        CB1: "Van Dijk",
+        CB2: "Konate",
+        RB: "Alexander-Arnold",
+        LM: "Gakpo",
+        CM1: "McAllister",
+        CM2: "Thiago",
+        RM: "Salah",
+        ST1: "Nunez",
+        ST2: "Jota"
+        },
+
+    "borusia": {
+        GK: "Kobel",
+        LB: "Guerreiro",
+        CB1: "Hummels",
+        CB2: "Schlotterbeck",
+        RB: "Meunier",
+        LM: "Brandt",
+        CM1: "Bellingham",
+        CM2: "Witsel",
+        RM: "Reus",
+        ST1: "Haaland",
+        ST2: "Moukoko"
+    },
+
+    "milan": {
+        GK: "Maignan",
+        LB: "Hernandez",
+        CB1: "Tomori",
+        CB2: "Kalulu",
+        RB: "Florenzi",
+        LM: "Leao",
+        CM1: "Tonali",
+        CM2: "Kessie",
+        RM: "Saelemaekers",
+        ST1: "Giroud",
+        ST2: "Ibrahimovic"
+    },
+
+    "monaco": {
+        GK: "Nübel",
+        LB: "Henrichs",
+        CB1: "Disasi",
+        CB2: "Badiashile",
+        RB: "Maripan",
+        LM: "Golovin",
+        CM1: "Tchouameni",
+        CM2: "Fofana",
+        RM: "Diatta",
+        ST1: "Ben Yedder",
+        ST2: "Boadu"
+    },
+
+    "betis": {
+        GK: "Bravo",
+        LB: "Miranda",
+        CB1: "Pezzella",
+        CB2: "Bartra",
+        RB: "Emerson",
+        LM: "Rodriguez",
+        CM1: "Guido Rodriguez",
+        CM2: "Canales",
+        RM: "Fekir",
+        ST1: "Borja Iglesias",
+        ST2: "Juanmi"
+    }
+  };
+  
+  let selectedTeamId = null; // Variable para almacenar el equipo seleccionado
+  
+  function loadTeamLineup(teamId) {
+    const soccerField = document.querySelector('.soccer-field');
+    if (!soccerField) {
+        console.warn("No soccer-field container found in the teams section.");
+        return;
+    }
+    fetchData(`teams/${teamId}`).then(team => {
+        console.log("Team fetched:", team);
+        if (!team) return;
+        let lineup = team.players;
+        if (!lineup || Object.keys(lineup).length === 0) {
+            const key = team.name.trim().toLowerCase();
+            if (defaultTeamLineups[key]) {
+                lineup = defaultTeamLineups[key];
+                console.log("Using default lineup for", key, lineup);
+            } else {
+                lineup = defaultLineup;
+                console.log("No default lineup for", key, "using empty lineup", lineup);
+            }
+        } else {
+            console.log("Using team.players:", lineup);
+        }
+        const positions = soccerField.querySelectorAll('.position');
+        console.log("Positions found:", positions);
+        positions.forEach(posEl => {
+            const pos = posEl.getAttribute('data-position');
+            // Actualizamos el texto: si la plantilla tiene el valor, se muestra, de lo contrario se muestra la posición
+            posEl.textContent = lineup[pos] || pos;
+        });
+    }).catch(error => {
+        console.error("Error loading team lineup:", error);
+    });
+}
