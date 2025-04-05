@@ -5,13 +5,11 @@ document.addEventListener('DOMContentLoaded', function () {
     const knownTeamsLogos = {
         "atleticodemadrid": "atleticodemadrid.JPG",
         "barcelona": "barcelona.JPG",
-        "bayern": "bayern.JPEG",
         "betis": "betis.JPG",
         "borusia": "borusia.JPG",
         "liverpool": "liverpool.JPG",
         "milan": "milan.JPG",
         "monaco": "monaco.JPG",
-        "psg": "psg.JPG",
         "realmadrid": "realmadrid.JPG"
     };
 
@@ -191,33 +189,35 @@ document.addEventListener('DOMContentLoaded', function () {
             const matchesArray = Object.values(matches);
             console.log(`matches: ${JSON.stringify(matchesArray)}`);
             matchesContainer.innerHTML = '';
-            matchesArray.forEach(async match => {
-                const team1Logo = knownTeamsLogos[match.team1Id] || 'logos/default.png';
-                const team2Logo = knownTeamsLogos[match.team2Id] || 'logos/default.png';
-
+            for (const match of matchesArray) {
+                // Obtenemos los equipos usando sus IDs
                 const team1 = await fetchData(`teams/${match.team1Id}`);
-                console.log(`team1: ${JSON.stringify(team1)}`);
-
-                const team1Name = await fetchData(`teams/${match.team1Id}`).then(res => res.name);
-                const team2Name = await fetchData(`teams/${match.team2Id}`).then(res => res.name);
-                const tournamentName = await fetchData(`tournaments/${match.tournamentId}`).then(res => res.name);
-
-
-                console.log(`team1Name: ${team1Name}`);
-
+                const team2 = await fetchData(`teams/${match.team2Id}`);
+                // Obtenemos el torneo para mostrar el nombre (opcional)
+                const tournament = await fetchData(`tournaments/${match.tournamentId}`);
+        
+                // Usamos el campo badge directamente, si no existe, usamos un default
+                const team1Logo = team1.badge ? team1.badge : `${API_BASE_URL}/logos/default.jpg`;
+                const team2Logo = team2.badge ? team2.badge : `${API_BASE_URL}/logos/default.jpg`;
+        
+                // También obtenemos los nombres de los equipos
+                const team1Name = team1.name;
+                const team2Name = team2.name;
+                const tournamentName = tournament.name;
+        
                 const div = document.createElement('div');
                 div.classList.add('list-item');
                 div.innerHTML = `
                     <div class="match-card">
-                    <div class="team-info"
-                        <img src="${team1Logo}" alt="${team1Name}" class="team-logo">
-                        <strong>${team1Name}</strong>
-                    </div>
+                        <div class="team-info">
+                            <img src="${team1Logo}" alt="${team1Name}" class="team-logo">
+                            <strong>${team1Name}</strong>
+                        </div>
                         <span>vs</span>
-                    <div class="team-info">
-                        <img src="${team2Logo}" alt="${team2Name}" class="team-logo">
-                        <strong>${team2Name}</strong>
-                    </div>
+                        <div class="team-info">
+                            <img src="${team2Logo}" alt="${team2Name}" class="team-logo">
+                            <strong>${team2Name}</strong>
+                        </div>
                         <div class="match-details">
                             <p><strong>Tournament:</strong> ${tournamentName}</p>
                             <p><strong>Date:</strong> ${match.date} - <strong>Time:</strong> ${match.time}</p>
@@ -226,8 +226,9 @@ document.addEventListener('DOMContentLoaded', function () {
                     </div>
                 `;
                 matchesContainer.appendChild(div);
-            });
+            }
         }
+        
 
         matchesContainer.addEventListener('click', async function (e) {
             if (e.target.classList.contains('delete-match')) {
