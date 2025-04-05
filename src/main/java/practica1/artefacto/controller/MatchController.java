@@ -8,7 +8,6 @@ import practica1.artefacto.model.Match;
 import practica1.artefacto.service.MatchService;
 
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/api/matches")

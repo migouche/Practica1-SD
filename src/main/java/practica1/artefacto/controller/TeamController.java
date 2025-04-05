@@ -6,7 +6,6 @@ import practica1.artefacto.model.Team;
 import practica1.artefacto.service.TeamService;
 
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/api/teams")

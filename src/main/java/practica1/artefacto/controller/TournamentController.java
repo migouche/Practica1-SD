@@ -5,7 +5,6 @@ import org.springframework.web.bind.annotation.*;
 import practica1.artefacto.model.Tournament;
 import practica1.artefacto.service.TournamentService;
 
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
