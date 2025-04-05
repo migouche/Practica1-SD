@@ -302,6 +302,28 @@ document.addEventListener('DOMContentLoaded', function () {
         updateMatchesList();
     }
 
+    async function updateTeamsDatalist() {
+        try {
+            const teams = await fetchData('teams');
+            const teamsArray = Object.values(teams);
+            const datalist = document.getElementById('teams-datalist');
+            if (datalist) {
+                datalist.innerHTML = '';
+                teamsArray.forEach(team => {
+                    const option = document.createElement('option');
+                    option.value = team.name;
+                    datalist.appendChild(option);
+                });
+            }
+        } catch (error) {
+            console.error("Error fetching teams for datalist:", error);
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        updateTeamsDatalist();
+    });
+
     function showModal(message) {
         const modal = document.getElementById('modal-alert');
         const modalMessage = document.getElementById('modal-message');

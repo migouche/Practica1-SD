@@ -41,12 +41,13 @@
         </div>
         <div>
           <label for="match-team1">Team 1:</label>
-          <input type="text" id="match-team1" name="matchTeam1" required>
+          <input list="teams-datalist" id="match-team1" name="matchTeam1" required>
         </div>
         <div>
           <label for="match-team2">Team 2:</label>
-          <input type="text" id="match-team2" name="matchTeam2" required>
+          <input list="teams-datalist" id="match-team2" name="match-team2" required>
         </div>
+        <datalist id="teams-datalist"></datalist>
         <div>
           <label for="match-tournament">Tournament:</label>
           <input type="text" id="match-tournament" name="matchTournament" required>
