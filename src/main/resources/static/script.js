@@ -144,6 +144,11 @@ document.addEventListener('DOMContentLoaded', function () {
             const team2Name = document.getElementById('match-team2').value;
             const tournamentName = document.getElementById('match-tournament').value;
 
+            if (!date || !time || !team1Name || !team2Name || !tournamentName) {
+                showModal('Please fill in all fields.');
+                return;
+            }
+
             // First, find the teams by name
             const teams = await fetchData('teams');
             const teamsArray = Object.values(teams);
@@ -157,16 +162,16 @@ document.addEventListener('DOMContentLoaded', function () {
             
             
             if (!team1 || !team2) {
-                alert("One or both teams don't exist. Please create them first.");
+                showModal("One or both teams don't exist. Please create them first.");
                 return;
             }
 
             if (team1.id === team2.id) {
-                alert("A team cannot play against itself.");
+                showModal("A team cannot play against itself.");
                 return;
             }
             if (!tournament) {
-                alert("Tournament not found. Please create it first.");
+                showModal("Tournament not found. Please create it first.")
                 return;
             }
             
@@ -240,6 +245,21 @@ document.addEventListener('DOMContentLoaded', function () {
 
         updateMatchesList();
     }
+
+    function showModal(message) {
+        const modal = document.getElementById('modal-alert');
+        const modalMessage = document.getElementById('modal-message');
+        modalMessage.textContent = message;
+        modal.style.display = "block";
+      }
+      
+      function hideModal() {
+        const modal = document.getElementById('modal-alert');
+        modal.style.display = "none";
+      }
+      
+      // Cerrar el modal al hacer clic en la 'X'
+      document.getElementById('modal-close').addEventListener('click', hideModal);
 
 
 });
