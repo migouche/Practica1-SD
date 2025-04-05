@@ -19,6 +19,51 @@ document.addEventListener('DOMContentLoaded', function () {
         const response = await fetch(`${API_BASE_URL}/${endpoint}`);
         return response.json();
     }
+    function loadTeamLineup(teamId) {
+        const soccerField = document.querySelector('.soccer-field');
+        if (!soccerField) {
+            console.warn("No soccer-field container found in the teams section.");
+            return;
+        }
+        fetchData(`teams/${teamId}`).then(team => {
+            console.log("Team fetched:", team);
+            if (!team) return;
+            let lineup = team.players;
+            if (!lineup || Object.keys(lineup).length === 0) {
+                const key = team.name.trim().toLowerCase();
+                if (defaultTeamLineups[key]) {
+                    lineup = defaultTeamLineups[key];
+                    console.log("Using default lineup for", key, lineup);
+                } else {
+                    lineup = defaultLineup;
+                    console.log("No default lineup for", key, "using empty lineup", lineup);
+                }
+            } else {
+                console.log("Using team.players:", lineup);
+            }
+            const positions = soccerField.querySelectorAll('.position');
+            console.log("Positions found:", positions.length);
+            positions.forEach(posEl => {
+                const pos = posEl.getAttribute('data-position');
+                // Actualizamos el texto: si la plantilla tiene el valor, se muestra; si no, se muestra la posición
+                posEl.textContent = lineup[pos] || pos;
+            });
+        }).catch(error => {
+            console.error("Error loading team lineup:", error);
+        });
+    }
+    
+    document.addEventListener('DOMContentLoaded', function () {
+        const teamsView = document.getElementById('teams-view');
+        if (teamsView) {
+            const params = new URLSearchParams(window.location.search);
+            const teamId = params.get('teamId');
+            if (teamId) {
+                console.log("Reading teamId from URL:", teamId);
+                loadTeamLineup(parseInt(teamId));
+            }
+        }
+    });
 
     async function postData(endpoint, data) {
         const response = await fetch(`${API_BASE_URL}/${endpoint}`, {
@@ -129,9 +174,11 @@ document.addEventListener('DOMContentLoaded', function () {
                 updateTeamsList();
             }
             if (e.target.classList.contains('show-lineup')) {
-                const id = Number(e.target.getAttribute('data-id'));
+                console.log("Show Lineup button clicked, team id:", e.target.getAttribute('data-id'));
+                const id = e.target.getAttribute('data-id');
                 window.location.href = `teams.html?teamId=${id}`;
             }
+            
         });
 
         updateTeamsList();
@@ -399,36 +446,6 @@ const defaultLineup = {
   
   let selectedTeamId = null; // Variable para almacenar el equipo seleccionado
   
-  function loadTeamLineup(teamId) {
-    const soccerField = document.querySelector('.soccer-field');
-    if (!soccerField) {
-        console.warn("No soccer-field container found in the teams section.");
-        return;
-    }
-    fetchData(`teams/${teamId}`).then(team => {
-        console.log("Team fetched:", team);
-        if (!team) return;
-        let lineup = team.players;
-        if (!lineup || Object.keys(lineup).length === 0) {
-            const key = team.name.trim().toLowerCase();
-            if (defaultTeamLineups[key]) {
-                lineup = defaultTeamLineups[key];
-                console.log("Using default lineup for", key, lineup);
-            } else {
-                lineup = defaultLineup;
-                console.log("No default lineup for", key, "using empty lineup", lineup);
-            }
-        } else {
-            console.log("Using team.players:", lineup);
-        }
-        const positions = soccerField.querySelectorAll('.position');
-        console.log("Positions found:", positions);
-        positions.forEach(posEl => {
-            const pos = posEl.getAttribute('data-position');
-            // Actualizamos el texto: si la plantilla tiene el valor, se muestra, de lo contrario se muestra la posición
-            posEl.textContent = lineup[pos] || pos;
-        });
-    }).catch(error => {
-        console.error("Error loading team lineup:", error);
-    });
-}
+  
+
+    

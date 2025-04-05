@@ -16,7 +16,7 @@ public class ArtefactoApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(ArtefactoApplication.class, args);
 	}
-
+/* 
 	@Bean
 	CommandLineRunner initData(TeamService teamService, TournamentService tournamentService) {
 		return args -> {
@@ -48,4 +48,5 @@ public class ArtefactoApplication {
 		t.setDate("2023-10-01");
 		tournamentService.create(t);
 	}
+	 */
 }
