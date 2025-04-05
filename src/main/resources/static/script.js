@@ -176,7 +176,10 @@ document.addEventListener('DOMContentLoaded', function () {
             if (e.target.classList.contains('show-lineup')) {
                 console.log("Show Lineup button clicked, team id:", e.target.getAttribute('data-id'));
                 const id = e.target.getAttribute('data-id');
-                window.location.href = `teams.html?teamId=${id}`;
+                // En lugar de redirigir, mostramos directamente la alineación
+                loadTeamLineup(parseInt(id));
+                // Aseguramos que el apartado de la alineación esté visible
+                document.getElementById('players-field').style.display = 'block';
             }
             
         });
@@ -444,6 +447,5 @@ const defaultLineup = {
     }
   };
 
-  
 
-    
+
